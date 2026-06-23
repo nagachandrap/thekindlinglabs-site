@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Secure Checkout · Magic of Breath & Elevated Chakras</title>
+<style>
+  :root{
+    /* flyer palette: warm ivory ground · bronze-gold · deep forest green */
+    --cream:#f1e7d6; --paper:#fbf5e9; --ink:#2a251d; --sub:#6b6150;
+    --gold:#b78a44; --gold-d:#93702e; --gold-l:#e0c994; --green:#2c382f; --green-d:#222b25; --ok:#3f8f63; --line:rgba(120,95,55,.24);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; color:var(--ink); line-height:1.55; font-family:"Segoe UI",-apple-system,Helvetica,Arial,sans-serif;
+    border-top:3px solid var(--green);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+      radial-gradient(900px 520px at 85% -8%,#f8f1e2,transparent 60%),
+      radial-gradient(700px 460px at 50% 120%, rgba(44,56,47,.14) 0%, transparent 60%),
+      linear-gradient(180deg,#f1e7d6,#e7ddc9);
+    background-attachment:fixed; min-height:100vh;}
+  .serif{font-family:Georgia,"Times New Roman",serif;}
+  a{color:var(--gold-d);}
+  .wrap{max-width:880px; margin:0 auto; padding:22px;}
+  .top{display:flex; align-items:center; gap:12px; height:60px;}
+  .top img{width:38px;height:38px;}
+  .top .nm{font-weight:700;} .top .tg{font-size:10px;color:var(--gold-d);letter-spacing:.14em;text-transform:uppercase;font-weight:700;}
+  .top .lock{margin-left:auto; font-size:12.5px; color:var(--sub);}
+  h1{font-size:clamp(23px,4vw,30px); margin:12px 0 4px; font-weight:700;}
+  .lede{color:var(--sub); margin:0 0 22px;}
+  .grid{display:grid; grid-template-columns:1.15fr .85fr; gap:20px; align-items:start;}
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:24px; box-shadow:0 10px 26px rgba(120,95,55,.12);}
+  .card h3{margin:0 0 14px; font-size:17px;}
+  label{display:block; font-size:12.5px; font-weight:600; margin:13px 0 6px;}
+  input{width:100%; padding:12px 14px; border-radius:11px; border:1px solid var(--line); background:#fffdf8; font-size:15px; font-family:inherit; outline:none; color:var(--ink);}
+  input:focus{border-color:var(--gold); box-shadow:0 0 0 3px rgba(181,143,77,.2);}
+  ::placeholder{color:#b3a78f;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .tabs{display:flex; gap:8px; margin-bottom:6px;}
+  .tab{flex:1; text-align:center; padding:11px; border-radius:11px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:600; font-size:13.5px;}
+  .tab.on{border-color:var(--gold); background:rgba(227,205,156,.34);}
+  .summary .line{display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px;}
+  .summary .line:last-of-type{border-bottom:none;}
+  .summary .line span:first-child{color:var(--sub);}
+  .total{display:flex; justify-content:space-between; align-items:baseline; font-size:20px; font-weight:800; margin-top:12px; padding-top:12px; border-top:2px solid var(--line); font-family:Georgia,serif;}
+  .ph-note{font-size:11.5px; color:var(--sub); margin-top:8px; background:rgba(181,143,77,.12); border:1px dashed var(--gold); border-radius:10px; padding:9px 11px;}
+  .pay{width:100%; margin-top:18px; padding:16px; border:none; border-radius:32px; cursor:pointer; font-size:16px; font-weight:700; font-family:inherit;
+    color:#fff; background:linear-gradient(135deg,var(--gold),var(--gold-d)); box-shadow:0 12px 28px rgba(150,118,54,.34);}
+  .pay:hover{transform:translateY(-1px);}
+  .fine{font-size:11.5px; color:var(--sub); text-align:center; margin-top:12px;}
+  .trust{display:flex; gap:14px; flex-wrap:wrap; color:var(--sub); font-size:12px; margin-top:14px; justify-content:center;}
+
+  .success{display:none; text-align:center; max-width:560px; margin:30px auto;}
+  .success .check{width:78px;height:78px;border-radius:50%;margin:0 auto 18px;background:linear-gradient(135deg,#3f8f63,#5fb98b);
+    display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff;box-shadow:0 0 28px rgba(63,143,99,.4);}
+  .success h2{margin:0 0 8px; font-size:26px;}
+  .success p{color:var(--sub);}
+  .success .box{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px; margin:20px 0; text-align:left; font-size:14px;}
+  .success .box .line{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);}
+  .success .box .line:last-child{border-bottom:none;} .success .box span:first-child{color:var(--sub);}
+  footer{background:linear-gradient(180deg,var(--green),var(--green-d)); color:#d8cfbf; text-align:center; padding:20px; font-size:13px; margin-top:30px;}
+  footer b{color:#f3ece1;}
+  @media(max-width:760px){ .grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img src="logo.jpeg" alt="" onerror="this.onerror=null;this.src='kindling-logo.svg'">
+    <div><div class="nm">The Kindling Labs</div><div class="tg">Leadership · Energy · Clarity</div></div>
+    <span class="lock">🔒 Secure checkout</span>
+  </div>
+
+  <!-- checkout -->
+  <div id="checkout">
+    <h1 class="serif">Secure your seat</h1>
+    <p class="lede"><span id="sEvent">Magic of Breath &amp; Elevated Chakras</span> · <span id="sDatesLede">Sun, 23 Aug 2026</span> · Bengaluru</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Payment details</h3>
+        <div class="tabs">
+          <div class="tab on" id="tabCard" onclick="setMethod('card')">💳 Card</div>
+          <div class="tab" id="tabUpi" onclick="setMethod('upi')">📲 UPI</div>
+        </div>
+        <div id="cardFields">
+          <label>Name on card</label><input id="cName" placeholder="Full name">
+          <label>Card number</label><input id="cNum" placeholder="1234 5678 9012 3456" inputmode="numeric">
+          <div class="row2">
+            <div><label>Expiry</label><input id="cExp" placeholder="MM/YY"></div>
+            <div><label>CVV</label><input id="cCvv" placeholder="123" inputmode="numeric"></div>
+          </div>
+        </div>
+        <div id="upiFields" style="display:none">
+          <label>UPI ID</label><input id="upiId" placeholder="yourname@upi">
+        </div>
+        <button class="pay" id="payBtn" onclick="pay()">🔒 Pay &amp; confirm my seat</button>
+        <div class="fine">This is a prototype — no real payment is processed.</div>
+        <div class="trust"><span>🔒 256-bit encrypted</span><span>🧾 Instant receipt</span><span>📲 WhatsApp confirmation</span></div>
+      </div>
+
+      <div class="card summary">
+        <h3>Order summary</h3>
+        <div class="line"><span>Workshop</span><span style="text-align:right"><b>Magic of Breath &amp;<br>Elevated Chakras</b></span></div>
+        <div class="line"><span>Dates</span><span id="sDates">Sun, 23 Aug 2026</span></div>
+        <div class="line"><span>Venue</span><span style="text-align:right">Hotel Green Park,<br>Bengaluru</span></div>
+        <div class="line"><span>Attendee</span><span id="sName">—</span></div>
+        <div class="line"><span>Seats</span><span id="sSeats">1</span></div>
+        <div class="total"><span>Total</span><span id="sTotal">₹ ——</span></div>
+        <div class="ph-note">💡 <b>Early-bird price pre-filled</b> at ₹9,699 / seat. Edit the field below if the fee changes and the total recalculates.</div>
+        <label for="pFee" style="margin-top:12px">Per-seat fee (₹)</label>
+        <input id="pFee" type="number" min="0" placeholder="e.g. 9699" oninput="recalc()">
+      </div>
+    </div>
+  </div>
+
+  <!-- success -->
+  <div class="success" id="success">
+    <div class="check">✓</div>
+    <h2 class="serif">Seat reserved, <span id="okName">friend</span>! 🪷</h2>
+    <p>Your place at <b>Magic of Breath &amp; Elevated Chakras</b> is confirmed.</p>
+    <div class="box" id="okBox"></div>
+    <p>We'll send your confirmation &amp; reporting details on WhatsApp. See you there. 🌅</p>
+    <a class="pay" style="display:inline-block;text-decoration:none;max-width:320px" href="magic-of-breath.html">← Back to event page</a>
+  </div>
+</div>
+
+<footer>Organized by <b>The Kindling Labs Private Limited</b></footer>
+
+<script>
+const reg=JSON.parse(localStorage.getItem('tkl_event_signup')||'{}');
+const seats=parseInt(reg.seats||'1')||1;
+document.getElementById('sName').textContent=reg.name||'You';
+document.getElementById('sSeats').textContent=seats;
+if(reg.name) document.getElementById('cName').value=reg.name;
+
+// reflect the event the attendee actually signed up for (falls back to defaults)
+if(reg.event) document.getElementById('sEvent').textContent = reg.event;
+if(reg.dates){ document.getElementById('sDates').textContent = reg.dates; document.getElementById('sDatesLede').textContent = reg.dates; }
+
+let fee=0;
+function recalc(){
+  fee=parseFloat(document.getElementById('pFee').value)||0;
+  document.getElementById('sTotal').textContent = fee>0 ? '₹ '+(fee*seats).toLocaleString('en-IN') : '₹ ——';
+}
+// pre-fill the advertised early-bird price so a total is shown by default
+document.getElementById('pFee').value = reg.perSeatFee || 9699;
+recalc();
+let method='card';
+function setMethod(m){ method=m;
+  document.getElementById('tabCard').classList.toggle('on',m==='card');
+  document.getElementById('tabUpi').classList.toggle('on',m==='upi');
+  document.getElementById('cardFields').style.display=m==='card'?'block':'none';
+  document.getElementById('upiFields').style.display=m==='upi'?'block':'none';
+}
+function pay(){
+  const btn=document.getElementById('payBtn'); btn.textContent='Processing… 🔒'; btn.disabled=true;
+  setTimeout(()=>{
+    const total = fee>0 ? '₹ '+(fee*seats).toLocaleString('en-IN') : '₹ —— (to be confirmed)';
+    // record paid registration
+    const rec={...reg, paid:true, perSeatFee:fee||null, total: fee>0?fee*seats:null, method, paidAt:new Date().toISOString()};
+    const arr=JSON.parse(localStorage.getItem('tkl_event_registrations')||'[]'); arr.push(rec);
+    localStorage.setItem('tkl_event_registrations',JSON.stringify(arr));
+    localStorage.removeItem('tkl_event_signup');
+
+    document.getElementById('checkout').style.display='none';
+    document.getElementById('okName').textContent=(reg.name||'friend').split(' ')[0];
+    document.getElementById('okBox').innerHTML=`
+      <div class="line"><span>Workshop</span><span><b>Magic of Breath &amp; Elevated Chakras</b></span></div>
+      <div class="line"><span>Dates</span><span>${reg.dates||'Sun, 23 Aug 2026'} · 7:30 AM</span></div>
+      <div class="line"><span>Venue</span><span>Hotel Green Park, Bengaluru</span></div>
+      <div class="line"><span>Seats</span><span>${seats}</span></div>
+      <div class="line"><span>Paid</span><span>${total} ✓</span></div>`;
+    document.getElementById('success').style.display='block';
+    window.scrollTo(0,0);
+  },1300);
+}
+</script>
+</body>
+</html>

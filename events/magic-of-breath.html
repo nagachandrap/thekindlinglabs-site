@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Magic of Breath & Elevated Chakras · The Kindling Labs</title>
+<style>
+  /* ============================================================
+     EDIT COLOURS / THEME HERE — everything is driven by these tokens.
+     Day mode = :root.  Night mode = body:has(#themeChk:checked) below.
+     The theme toggle is pure CSS (no JS) so it always works.
+     ============================================================ */
+  :root{
+    --orange:#F28C28; --orange-d:#d9761a;          /* energy · CTAs */
+    --amber:#F6C35D;  --amber-d:#e7ad3f;           /* warm highlights */
+    --cream:#FFF3DF;  --cream2:#fbe9cd; --paper:#fffaf0; /* calm canvas */
+    --brown:#6E4B1F;  --brown-d:#523715; --brown-dd:#3f2a10; /* grounding depth */
+    --ink:#4a3214; --sub:#8d7551; --line:rgba(110,75,31,.16);
+    --sh:0 14px 34px rgba(110,75,31,.12); --sh-sm:0 6px 18px rgba(110,75,31,.10);
+
+    --bar-bg:rgba(255,243,223,.86);     /* sticky top bar */
+    --field-bg:#fffefb;                 /* inputs + chips */
+    --pill-bg:var(--paper);             /* outcome pills */
+
+    /* "Four ancient tools" band — white → very light orange */
+    --tools-top:#ffffff; --tools-bot:#ffe6cd; --tools-card:#ffffff;
+  }
+  /* ---------- NIGHT / DARK THEME (CSS-only, via the toggle) ---------- */
+  body:has(#themeChk:checked){
+    --cream:#241a0d;  --cream2:#1e1509; --paper:#2f2310;
+    --ink:#f3e7d0;    --sub:#c4ab85;    --brown:#f2d8a2;
+    --line:rgba(246,195,93,.18);
+    --sh:0 14px 34px rgba(0,0,0,.4); --sh-sm:0 6px 18px rgba(0,0,0,.34);
+    --bar-bg:rgba(28,20,10,.9);
+    --field-bg:#1d1409;
+    --pill-bg:#332512;
+    --tools-top:#2a1e10; --tools-bot:#191108; --tools-card:#33240f;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+    font-family:"Segoe UI",-apple-system,Helvetica,Arial,sans-serif; background:var(--cream); transition:background .35s ease, color .35s ease;}
+  .serif{font-family:"Georgia","Times New Roman",serif;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  @keyframes up{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:none;}}
+  .anim{animation:up .8s cubic-bezier(.2,.7,.3,1) both;}
+  .d1{animation-delay:.05s;} .d2{animation-delay:.16s;} .d3{animation-delay:.3s;} .d4{animation-delay:.44s;} .d5{animation-delay:.58s;}
+  .eyebrow{display:inline-flex; align-items:center; gap:9px; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:800;}
+  .eyebrow::before{content:''; width:26px; height:2px; background:currentColor; border-radius:2px; opacity:.7;}
+
+  /* outline helper for text on light/orange buttons */
+  .txt-outline{text-shadow:0 1px 2px rgba(140,75,15,.4);}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer; font-family:inherit;
+    border-radius:40px; padding:15px 28px; font-size:15.5px; font-weight:700; transition:.18s; text-decoration:none;}
+  .btn.primary{background:linear-gradient(135deg,var(--amber),var(--orange)); color:#fff; box-shadow:0 14px 30px rgba(242,140,40,.34);
+    text-shadow:0 1px 2px rgba(140,75,15,.4);}
+  .btn.primary:hover{transform:translateY(-2px); box-shadow:0 18px 40px rgba(242,140,40,.5);}
+  .btn.cream{background:#fff; color:var(--brown-d); box-shadow:0 14px 30px rgba(80,45,10,.28);}
+  .btn.cream:hover{transform:translateY(-2px);}
+  .btn.ghost{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.55); color:#fff;}
+  .btn.ghost:hover{background:rgba(255,255,255,.24);}
+
+  /* sticky bar */
+  .bar{position:sticky; top:0; z-index:50; background:var(--bar-bg); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); transition:background .35s ease;}
+  .bar .wrap{display:flex; align-items:center; justify-content:space-between; height:64px; gap:12px;}
+  .blogo{display:flex; align-items:center; gap:11px;}
+  .blogo img{width:38px; height:38px; border-radius:50%; object-fit:cover; filter:drop-shadow(0 2px 5px rgba(110,75,31,.3));}
+  .blogo .nm{font-weight:800; font-size:15.5px; color:var(--brown);}
+  .blogo .tg{font-size:9px; color:var(--orange-d); letter-spacing:.16em; text-transform:uppercase; font-weight:800;}
+  .bar-right{display:flex; align-items:center; gap:12px;}
+  .barcta{display:inline-flex; align-items:center; gap:7px; background:#fff; color:var(--brown-d);
+    padding:10px 18px; border-radius:30px; font-size:13.5px; font-weight:700; white-space:nowrap; box-shadow:0 8px 20px rgba(80,45,10,.22);}
+  .barcta:hover{transform:translateY(-1px);}
+
+  /* day / night toggle — pure CSS (checkbox + label) */
+  .theme-chk{position:absolute; opacity:0; width:0; height:0; pointer-events:none;}
+  .themetoggle{display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line); background:var(--field-bg); color:var(--brown);
+    width:40px; height:40px; border-radius:50%; cursor:pointer; font-family:inherit; transition:.18s; user-select:none;}
+  .themetoggle:hover{border-color:var(--amber); transform:translateY(-1px);}
+  .theme-chk:focus-visible + .themetoggle{outline:2px solid var(--orange); outline-offset:2px;}
+  .themetoggle .ti{font-size:16px; line-height:1;}
+  .themetoggle .ti-sun,.themetoggle .tl-light{display:none;}
+  body:has(#themeChk:checked) .themetoggle .ti-moon,
+  body:has(#themeChk:checked) .themetoggle .tl-dark{display:none;}
+  body:has(#themeChk:checked) .themetoggle .ti-sun,
+  body:has(#themeChk:checked) .themetoggle .tl-light{display:inline;}
+  @media(max-width:520px){ .themetoggle .tl{display:none;} .themetoggle{padding:8px 10px;} }
+
+  /* hero — warm sunrise gradient (theme-independent; corner warmed, no muddy brown) */
+  .hero{position:relative; overflow:hidden; color:#fff;
+    background:
+      radial-gradient(720px 480px at 82% 16%, rgba(255,246,224,.55), transparent 60%),
+      linear-gradient(135deg, #9c6526 0%, #c47b29 36%, var(--orange) 66%, #f8ad45 100%);}
+  .hero::after{content:''; position:absolute; inset:0; pointer-events:none; opacity:.05;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .hero .wrap{position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:46px; align-items:center; padding:52px 24px 58px;}
+  .hero .eyebrow{color:#fff3d6;}
+  h1{font-size:clamp(38px,5.8vw,62px); line-height:1.02; margin:18px 0 14px; font-weight:700; letter-spacing:-.015em; color:#fff; text-shadow:0 2px 14px rgba(90,50,10,.25);}
+  h1 em{font-style:italic; color:#fff0cf; font-weight:600;}
+  .promise{font-size:clamp(16px,2.1vw,19px); color:#fff5e6; max-width:520px; margin:0 0 22px; line-height:1.6;}
+  .promise b{color:#fff; font-weight:700;}
+  .facts{display:flex; flex-wrap:wrap; gap:10px; margin:0 0 22px;}
+  .facts span{display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--brown-d); font-weight:700;
+    background:linear-gradient(110deg,#ffffff 0%,#fff3df 26%,#ffe3c4 50%,#fff3df 74%,#ffffff 100%); background-size:280% 100%;
+    border:1px solid rgba(255,255,255,.75); padding:7px 13px; border-radius:30px; box-shadow:0 4px 12px rgba(120,70,15,.18);
+    animation:tintshift 7s ease-in-out infinite;}
+  @keyframes tintshift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+  .offer{display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    background:linear-gradient(110deg,#ffffff 0%,#fff3df 26%,#ffe3c4 50%,#fff3df 74%,#ffffff 100%); background-size:280% 100%;
+    border:1px solid rgba(255,255,255,.85); border-radius:18px; padding:15px 19px; margin:0 0 24px;
+    box-shadow:0 10px 26px rgba(120,70,15,.22); animation:tintshift 7s ease-in-out infinite;}
+  .offer .ob small{display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--orange-d); font-weight:800; margin-bottom:1px;}
+  .offer .big{font-size:32px; font-weight:800; color:var(--brown-d); font-family:Georgia,serif; line-height:1;}
+  .savebadge{display:inline-flex; flex-direction:column; align-items:center; gap:1px; background:linear-gradient(135deg,var(--orange),var(--orange-d));
+    color:#fff; padding:9px 15px; border-radius:13px; box-shadow:0 10px 22px rgba(150,80,20,.4); transform:rotate(-2.5deg);}
+  .savebadge .pct{font-size:18px; font-weight:800; font-family:Georgia,serif; line-height:1;}
+  .savebadge .amt{font-size:11px; font-weight:800; letter-spacing:.02em;}
+  .offer .reg{font-size:12.5px; color:#9a8358;} .offer .reg s{color:#b6a07c;}
+  .hero-cta{display:flex; gap:13px; flex-wrap:wrap; align-items:center;}
+  .urgency{margin-top:18px; font-size:13px; color:#fff5e6; display:inline-flex; align-items:center; gap:8px; font-weight:600;}
+  .urgency .dot{width:8px; height:8px; border-radius:50%; background:#fff; animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6);}70%{box-shadow:0 0 0 9px rgba(255,255,255,0);}100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+
+  .teaser{position:relative; border-radius:22px; overflow:hidden; border:3px solid rgba(255,255,255,.5);
+    box-shadow:0 30px 70px rgba(80,45,10,.45); background:#241a0f; aspect-ratio:4/5;}
+  .teaser video{width:100%; height:100%; object-fit:cover; display:block; opacity:.95;}
+  .teaser .tlabel{position:absolute; top:14px; left:14px; background:rgba(36,26,15,.62); color:#fff; backdrop-filter:blur(6px);
+    padding:6px 12px; border-radius:20px; font-size:11.5px; display:flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.22);}
+  .teaser .tnote{position:absolute; bottom:0; left:0; right:0; padding:13px; font-size:12px; color:#f6ecd8;
+    background:linear-gradient(transparent,rgba(36,26,15,.92)); text-align:center;}
+
+  section{padding:54px 0;}
+  .sec-head{max-width:680px; margin:0 0 30px;}
+  .sec-head .eyebrow{color:var(--orange-d); margin-bottom:10px;}
+  .sec-h{font-size:clamp(25px,3.4vw,36px); margin:0; font-weight:700; color:var(--brown); letter-spacing:-.01em;}
+  .sec-s{color:var(--sub); font-size:15px; margin:8px 0 0; max-width:620px;}
+
+  /* heading + rotating chakra row */
+  .headrow{display:flex; align-items:center; gap:.4em;}
+
+  /* ---- lotus chakra (sized to the heading; ONLY the petals rotate) ---- */
+  .chakra{width:1.3em; height:1.3em; flex:0 0 auto; display:inline-flex; line-height:0;}
+  .chakra svg{width:100%; height:100%; overflow:visible; display:block;}
+  .chakra .ck-outer,.chakra .ck-inner{transform-box:fill-box; transform-origin:center;}
+  .chakra .ck-outer{animation:spin 32s linear infinite;}
+  .chakra .ck-inner{animation:spin 22s linear infinite reverse;}
+  .chakra .ck-outer use{fill:rgba(246,195,93,.14); stroke:var(--amber); stroke-width:1.3; stroke-linejoin:round;}
+  .chakra .ck-inner use{fill:rgba(242,140,40,.18); stroke:var(--orange); stroke-width:1.3; stroke-linejoin:round;}
+  .chakra .ring{fill:none; stroke:var(--amber); stroke-width:1.1;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* TOOLS — light band: white → very light orange */
+  .tools-wrap{background:linear-gradient(180deg, var(--tools-top) 0%, var(--tools-bot) 100%); color:var(--ink); transition:background .35s ease;}
+  .tools-wrap .eyebrow{color:var(--orange-d);}
+  .tools-wrap .sec-h{color:var(--brown);}
+  .tools-wrap .sec-s{color:var(--sub);}
+  .tools{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+  .tool{background:var(--tools-card); border:1px solid var(--line); border-radius:20px; padding:24px 20px; text-align:center; transition:.2s; box-shadow:var(--sh-sm);}
+  .tool:hover{transform:translateY(-5px); box-shadow:var(--sh); border-color:var(--amber);}
+  .ticon{width:66px; height:66px; border-radius:50%; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; font-size:28px;
+    color:#fff; box-shadow:0 10px 22px rgba(110,75,31,.28);}
+  .tool h3{margin:0 0 5px; font-size:18.5px; color:var(--brown); font-family:Georgia,serif;}
+  .tool .twhat{font-size:12.5px; font-style:italic; color:var(--sub); margin-bottom:14px; min-height:34px;}
+  .tool .tben{border-top:1px solid var(--line); padding-top:13px; font-size:13px; color:var(--ink);}
+  .tool .tben b{display:block; color:var(--orange-d); font-size:13.5px; margin-bottom:3px;}
+  .together{text-align:center; margin-top:26px; font-style:italic; font-family:Georgia,serif; font-size:19px; color:var(--orange-d);}
+
+  /* outcomes strip */
+  .outwrap{background:var(--cream2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .outwrap .inner{padding:30px 0; display:flex; gap:22px; align-items:center; flex-wrap:wrap;}
+  .outwrap .lead{font-size:15px; color:var(--ink); margin:0; flex:1; min-width:240px;}
+  .outwrap .lead b{color:var(--brown);}
+  .outcomes{display:flex; flex-wrap:wrap; gap:9px;}
+  .outcomes span{font-size:13px; background:var(--pill-bg); border:1px solid var(--line); color:var(--brown); padding:8px 14px; border-radius:30px; font-weight:600; box-shadow:var(--sh-sm);}
+  .outcomes span::before{content:'✓ '; color:var(--orange); font-weight:800;}
+
+  /* instructor */
+  .iband{display:grid; grid-template-columns:170px 1fr; gap:32px; align-items:start;}
+  .iphoto{width:170px; height:212px; border-radius:20px; position:relative; overflow:hidden; flex-shrink:0; position:sticky; top:80px;
+    background:linear-gradient(160deg,#fbe7c4,#eccb92); border:2px solid var(--amber); box-shadow:var(--sh);}
+  .iphoto img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 12%;}
+  .iphoto .fb{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    color:var(--orange-d); font-size:11.5px; font-weight:600; text-align:center; padding:8px;}
+  .iphoto .fb b{font-size:34px; font-family:Georgia,serif;}
+  .iname{font-size:27px; font-weight:700; font-family:Georgia,serif; color:var(--brown); display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .iname .tag{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:linear-gradient(135deg,var(--amber),var(--orange)); padding:4px 11px; border-radius:20px; font-family:inherit;}
+  .irole{color:var(--orange-d); font-weight:700; font-size:14px; margin:4px 0 14px;}
+  .ibio p{color:var(--ink); font-size:14.5px; margin:0 0 12px;}
+  .icreds{list-style:none; padding:0; margin:8px 0 16px; display:grid; grid-template-columns:1fr 1fr; gap:9px;}
+  .icreds li{font-size:13.5px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:11px 14px; font-weight:600; color:var(--brown); box-shadow:var(--sh-sm);}
+  .icreds li::before{content:'✔ '; color:var(--orange); font-weight:800;}
+  .iclose{font-size:14px; color:var(--sub); font-style:italic; margin:0 0 10px;}
+  .iweb{font-size:13.5px; color:var(--orange-d); font-weight:700;}
+
+  /* register */
+  #register{scroll-margin-top:74px;}
+  .reg-grid{display:grid; grid-template-columns:1fr .9fr; gap:26px; align-items:stretch;}
+  .form-card{background:var(--paper); border:1px solid var(--line); border-radius:24px; padding:30px; box-shadow:var(--sh);}
+  .form-card h3{margin:0 0 3px; font-size:22px; color:var(--brown);} .form-card .fsub{color:var(--sub); font-size:13.5px; margin:0 0 18px;}
+  label{display:block; font-size:12.5px; font-weight:700; margin:13px 0 6px; color:var(--brown);}
+  label .req{color:var(--orange-d);}
+  input,select,textarea{width:100%; padding:13px 15px; border-radius:12px; border:1px solid var(--line); background:var(--field-bg); font-size:15px; font-family:inherit; outline:none; color:var(--ink);}
+  input:focus,select:focus,textarea:focus{border-color:var(--orange); box-shadow:0 0 0 3px rgba(242,140,40,.18);}
+  textarea{resize:vertical; min-height:60px;}
+  ::placeholder{color:#bca988;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:13px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{padding:8px 14px; border-radius:30px; border:1px solid var(--line); background:var(--field-bg); cursor:pointer; font-size:13px; user-select:none; transition:.15s; color:var(--ink);}
+  .chip:hover{border-color:var(--amber);}
+  .chip.on{background:linear-gradient(135deg,var(--amber),var(--orange)); border-color:transparent; color:#fff; font-weight:700;}
+  .err{color:var(--orange-d); font-size:12.5px; margin-top:6px; display:none;}
+  .form-card .btn.primary{width:100%; margin-top:20px; padding:16px;}
+  .fine{font-size:11.5px; color:var(--sub); text-align:center; margin-top:12px;}
+
+  /* offer card — hero-style orange gradient */
+  .offer-card{background:linear-gradient(155deg, #7a4f1f 0%, #b4691e 52%, #d9761a 100%); color:#fff6e6; border-radius:24px; padding:28px;
+    box-shadow:0 18px 40px rgba(120,70,15,.32); text-shadow:0 1px 1px rgba(80,40,5,.22); display:flex; flex-direction:column;}
+  .offer-card .ol{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#ffe9c4; font-weight:800;}
+  .offer-card .oa{font-size:42px; font-weight:800; font-family:Georgia,serif; line-height:1; margin:6px 0; color:#fff8ec;}
+  .offer-card .oa small{font-size:14px; font-weight:500; color:#ffe6c4;}
+  .saverow{display:flex; align-items:center; gap:12px; margin-top:4px; flex-wrap:wrap;}
+  .saverow .save-pill{background:linear-gradient(135deg,var(--amber),var(--orange)); color:#fff; font-weight:800; font-size:13px; padding:7px 13px; border-radius:11px;
+    border:1px solid rgba(255,255,255,.55); box-shadow:0 8px 18px rgba(120,60,10,.4);
+    text-shadow:0 1px 1px rgba(140,75,15,.38);}
+  .saverow .reg{font-size:13px; color:#ffe6c9;} .saverow .reg s{color:#e2c39a;}
+  .offer-card .duo{margin-top:16px; font-size:13px; background:rgba(255,255,255,.16); border:1px dashed rgba(255,255,255,.6); border-radius:12px; padding:11px 13px;}
+  .offer-card .duo b{color:#fff2d2;}
+
+  /* offer card split: [includes + bring] | [timeline] */
+  .ocsplit{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:18px;}
+  .offer-card .blk{font-size:13px;} .offer-card .blk + .blk{margin-top:14px;}
+  .offer-card .blk div{padding:3px 0; color:#ffe6c9;} .offer-card .blk .bt{color:#fff; font-weight:800; margin-bottom:3px; letter-spacing:.02em;}
+
+  /* "What happens during the day" timeline */
+  .daytl .tlh{font-size:13px; font-weight:800; color:#fff; letter-spacing:.02em; margin-bottom:13px; display:flex; align-items:center; gap:8px;}
+  .daytl .tlh::before{content:'🕉️'; font-size:14px;}
+  .daytl ol{list-style:none; margin:0; padding:0; position:relative;}
+  .daytl ol::before{content:''; position:absolute; left:6px; top:5px; bottom:7px; width:2px; background:rgba(255,255,255,.35);}
+  .daytl li{position:relative; padding:0 0 13px 25px; line-height:1.35;}
+  .daytl li:last-child{padding-bottom:0;}
+  .daytl li::before{content:''; position:absolute; left:0; top:3px; width:14px; height:14px; border-radius:50%;
+    background:var(--amber); box-shadow:0 0 0 3px rgba(255,255,255,.22);}
+  .daytl .tt{display:block; color:#ffe7b0; font-weight:800; font-family:Georgia,serif; font-size:13px;}
+  .daytl .tl{color:#fff1da; font-size:12.5px;}
+
+  .offer-card .foot{margin-top:auto; padding-top:22px;}
+  .offer-card .nums{margin-top:14px; text-align:center; font-size:16px; font-weight:700; color:#fff8ec; font-family:Georgia,serif;}
+
+  /* seats "filling fast" progress bar (static numbers + CSS animation) */
+  .seatbar .sbtop{display:flex; justify-content:space-between; align-items:center; font-size:12.5px; font-weight:800; margin-bottom:8px; gap:10px;}
+  .seatbar .live{display:inline-flex; align-items:center; gap:7px; color:#fff;}
+  .seatbar .live .dot{width:8px; height:8px; border-radius:50%; background:#fff3d6; box-shadow:0 0 0 0 rgba(255,255,255,.6); animation:pulse 1.6s infinite;}
+  .seatbar .left{color:#fff;}
+  .seattrack{height:12px; border-radius:20px; background:rgba(0,0,0,.22); overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,.34);}
+  .seatfill{height:100%; width:var(--seat-pct,0%); border-radius:20px;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.45) 0 9px, rgba(255,255,255,0) 9px 18px),
+      linear-gradient(90deg, #ffd778, #fff);
+    background-size:26px 100%, 100% 100%;
+    animation:fillup 1.5s cubic-bezier(.2,.85,.25,1) .2s both, chase .55s linear infinite;}
+  @keyframes fillup{from{width:0;} to{width:var(--seat-pct,0%);}}
+  @keyframes chase{from{background-position:0 0,0 0;} to{background-position:26px 0,0 0;}}
+  .seatmeta{font-size:11.5px; color:#fff1da; margin-top:8px; text-align:center;}
+
+  footer{background:linear-gradient(180deg,#6E4B1F,#3f2a10); color:#e2d3b6; text-align:center; padding:26px; font-size:13.5px; margin-top:0;}
+  footer b{color:#fff8ec;}
+
+  @media(max-width:900px){ .tools{grid-template-columns:1fr 1fr;} }
+  @media(max-width:860px){
+    section{padding:42px 0;}
+    .hero .wrap{grid-template-columns:1fr; gap:28px; padding:36px 24px 42px;}
+    .teaser{aspect-ratio:16/10; max-width:520px;}
+    .reg-grid{grid-template-columns:1fr;}
+    .iband{grid-template-columns:1fr; gap:20px;}
+    .iphoto{position:relative; top:0; width:160px; height:170px; margin:0 auto;}
+    .iname{justify-content:center; text-align:center;} .irole{text-align:center;}
+    .icreds{grid-template-columns:1fr;}
+    .blogo .tg{display:none;}
+  }
+  @media(max-width:560px){ .tools{grid-template-columns:1fr;} .outwrap .inner{flex-direction:column; align-items:flex-start;} .ocsplit{grid-template-columns:1fr;} }
+
+  /* respect users who prefer no motion */
+  @media(prefers-reduced-motion:reduce){
+    .anim,.chakra .ck-outer,.chakra .ck-inner,.urgency .dot,.seatbar .live .dot,.facts span{animation:none;}
+    .seatfill{animation:none; width:var(--seat-pct,0%);}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="blogo">
+      <img src="logo.jpeg" alt="The Kindling Labs logo">
+      <div><div class="nm">The Kindling Labs</div><div class="tg">Wellness · Moderation · Elevate</div></div>
+    </div>
+    <div class="bar-right">
+      <input type="checkbox" id="themeChk" class="theme-chk">
+      <label for="themeChk" class="themetoggle" title="Switch day / night theme" aria-label="Switch day / night theme">
+        <span class="ti ti-moon">🌙</span><span class="ti ti-sun">☀️</span>
+      </label>
+      <a href="#register" class="barcta">Reserve — ₹9,699 →</a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow anim d1">1-Day Transformational Workshop</span>
+      <h1 class="serif anim d2">MAGIC <em>of</em> BREATH<br>&amp; ELEVATED CHAKRAS</h1>
+      <p class="promise anim d2">Ancient yogic science, made simple — to help you <b>sleep deeper, breathe easier and feel calmer every single day</b>. One powerful day of Pranayama, Mudras &amp; Chakra work.</p>
+      <div class="facts anim d3">
+        <span>📅 Sun, 23 Aug 2026</span>
+        <span>⏰ 7:30 AM – 5:00 PM</span>
+        <span>📍 Hotel Green Park, Bengaluru</span>
+      </div>
+      <div class="offer anim d3">
+        <div class="ob"><small>Early-bird</small><span class="big">₹9,699</span></div>
+        <div class="savebadge"><span class="pct">39% OFF</span><span class="amt">Save ₹6,300</span></div>
+        <div class="reg">Regular<br><s>₹15,999</s></div>
+      </div>
+      <div class="hero-cta anim d4">
+        <a href="#register" class="btn cream">✨ Reserve my seat</a>
+      </div>
+      <div class="urgency anim d5"><span class="dot"></span> Limited seats · Early-bird pricing won't last</div>
+    </div>
+    <div id="teaser" class="anim d4">
+      <div class="teaser">
+        <div class="tlabel">🎬 Workshop teaser</div>
+        <video src="teaser.mp4" controls preload="metadata" playsinline></video>
+        <div class="tnote">A glimpse of the Magic of Breath &amp; Elevated Chakras workshop.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FOUR ANCIENT TOOLS → benefits -->
+<div class="tools-wrap">
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">The solution</span><h2 class="sec-h serif">Four ancient tools, one system</h2>
+        <p class="sec-s">Each practice is paired with a benefit you'll feel in everyday life.</p></div>
+      <div class="tools">
+        <div class="tool">
+          <div class="ticon" style="background:linear-gradient(135deg,#f6c35d,#e0a32a)">⚡</div>
+          <h3>Breathwork</h3>
+          <div class="twhat">Conscious breath to reset body &amp; mind</div>
+          <div class="tben"><b>⚡ Energy &amp; focus</b>Clears fatigue and sharpens your daily focus.</div>
+        </div>
+        <div class="tool">
+          <div class="ticon" style="background:linear-gradient(135deg,#f0a23a,#d9761a)">🙏</div>
+          <h3>Mudras</h3>
+          <div class="twhat">Hand seals — divine energy codes</div>
+          <div class="tben"><b>🛡️ Immunity &amp; balance</b>Balance the 5 elements; support healing &amp; immunity.</div>
+        </div>
+        <div class="tool">
+          <div class="ticon" style="background:linear-gradient(135deg,#f6a23c,#f28c28)">🌬️</div>
+          <h3>Pranayama</h3>
+          <div class="twhat">Structured breath as medicine</div>
+          <div class="tben"><b>🌙 Sleep &amp; calm</b>Settles the nervous system for deeper, easier sleep.</div>
+        </div>
+        <div class="tool">
+          <div class="ticon" style="background:linear-gradient(135deg,#e7ad3f,#c4732e)">🪷</div>
+          <h3>Chakra Dhyana</h3>
+          <div class="twhat">Energy awakening through meditation</div>
+          <div class="tben"><b>🧘 Stress &amp; emotion</b>Releases stored stress; restores emotional balance.</div>
+        </div>
+      </div>
+      <div class="together">Together: cleanse, heal, energize.</div>
+    </div>
+  </section>
+</div>
+
+<!-- INSTRUCTOR -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Your facilitator</span><h2 class="sec-h serif">Learn from a master</h2></div>
+    <div class="iband">
+      <div class="iphoto">
+        <img src="venughopaal.jpg" alt="Venughopaal" onerror="this.remove()">
+        <div class="fb"><b>VG</b><span>Add photo<br>(venughopaal.jpg)</span></div>
+      </div>
+      <div>
+        <div class="iname serif">Venughopaal <span class="tag">Founder · The Best Life Academy</span></div>
+        <div class="irole">Transformational Coach &amp; Wellness Educator</div>
+        <div class="ibio">
+          <p>Venughopaal is a transformational coach and wellness educator with <b>over three decades of experience</b> guiding individuals toward greater self-awareness, personal growth, and holistic well-being.</p>
+          <p>Having trained thousands of professionals, students, educators, and leaders, he combines practical coaching methodologies with ancient energy practices such as <b>Mudras, Chakras, and Pranayama</b>. His sessions are engaging, experiential, and easy to apply in everyday life.</p>
+          <p>Through this workshop, participants benefit from his deep understanding of <b>mind-body-energy connections</b> and learn powerful techniques to improve vitality, emotional balance, mental clarity, and inner harmony.</p>
+        </div>
+        <ul class="icreds">
+          <li>546+ Workshops Conducted</li>
+          <li>69 Corporate Programs Delivered</li>
+          <li>6,000+ Participants Impacted</li>
+          <li>Mudras, Chakras, Pranayama, NLP, Psycho-Therapy &amp; Energy Healing</li>
+        </ul>
+        <p class="iclose">His practical, engaging and transformational approach helps participants experience lasting improvements in their physical, mental, emotional and spiritual well-being.</p>
+        <div class="iweb">🌐 www.thebestlifeacademy.in</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section id="register" style="background:var(--cream2); border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Reserve now</span>
+      <h2 class="sec-h serif headrow">
+        <span class="chakra" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <defs>
+              <path id="po" d="M50,30 C44,21 44,11 50,4.5 C56,11 56,21 50,30 Z"/>
+              <path id="pi" d="M50,27 C46,20 46,13.5 50,9 C54,13.5 54,20 50,27 Z"/>
+              <radialGradient id="ckCore" cx="50%" cy="42%" r="62%">
+                <stop offset="0" stop-color="#fff4d2"/>
+                <stop offset="46%" stop-color="#f7c45e"/>
+                <stop offset="100%" stop-color="#e07e1d"/>
+              </radialGradient>
+            </defs>
+            <!-- static outer rings -->
+            <circle class="ring" cx="50" cy="50" r="47"/>
+            <circle class="ring" cx="50" cy="50" r="43" opacity=".55"/>
+            <!-- rotating petal rings (ONLY these move) -->
+            <g class="ck-outer">
+              <use href="#po" transform="rotate(0 50 50)"/><use href="#po" transform="rotate(22.5 50 50)"/>
+              <use href="#po" transform="rotate(45 50 50)"/><use href="#po" transform="rotate(67.5 50 50)"/>
+              <use href="#po" transform="rotate(90 50 50)"/><use href="#po" transform="rotate(112.5 50 50)"/>
+              <use href="#po" transform="rotate(135 50 50)"/><use href="#po" transform="rotate(157.5 50 50)"/>
+              <use href="#po" transform="rotate(180 50 50)"/><use href="#po" transform="rotate(202.5 50 50)"/>
+              <use href="#po" transform="rotate(225 50 50)"/><use href="#po" transform="rotate(247.5 50 50)"/>
+              <use href="#po" transform="rotate(270 50 50)"/><use href="#po" transform="rotate(292.5 50 50)"/>
+              <use href="#po" transform="rotate(315 50 50)"/><use href="#po" transform="rotate(337.5 50 50)"/>
+            </g>
+            <g class="ck-inner">
+              <use href="#pi" transform="rotate(15 50 50)"/><use href="#pi" transform="rotate(45 50 50)"/>
+              <use href="#pi" transform="rotate(75 50 50)"/><use href="#pi" transform="rotate(105 50 50)"/>
+              <use href="#pi" transform="rotate(135 50 50)"/><use href="#pi" transform="rotate(165 50 50)"/>
+              <use href="#pi" transform="rotate(195 50 50)"/><use href="#pi" transform="rotate(225 50 50)"/>
+              <use href="#pi" transform="rotate(255 50 50)"/><use href="#pi" transform="rotate(285 50 50)"/>
+              <use href="#pi" transform="rotate(315 50 50)"/><use href="#pi" transform="rotate(345 50 50)"/>
+            </g>
+            <!-- static glowing centre -->
+            <circle cx="50" cy="50" r="10" fill="url(#ckCore)"/>
+            <circle cx="50" cy="50" r="3.6" fill="#fff8e6"/>
+          </svg>
+        </span>
+        <span>Claim your seat</span>
+      </h2>
+      <p class="sec-s">Limited seats · Early-bird pricing. Tell us what you're hoping for and we'll tailor your day.</p></div>
+    <div class="reg-grid">
+      <form class="form-card" id="regForm" novalidate>
+        <h3>Your details</h3>
+        <p class="fsub">Magic of Breath &amp; Elevated Chakras · Sun, 23 Aug 2026</p>
+        <div class="row2">
+          <div>
+            <label for="fName">Full name <span class="req">*</span></label>
+            <input id="fName" name="name" placeholder="Your name" autocomplete="name">
+            <div class="err" id="e-name">Please enter your name.</div>
+          </div>
+          <div>
+            <label for="fPhone">Phone / WhatsApp <span class="req">*</span></label>
+            <input id="fPhone" name="phone" type="tel" placeholder="+91 …" autocomplete="tel">
+            <div class="err" id="e-phone">Enter a valid number.</div>
+          </div>
+        </div>
+        <label for="fEmail">Email <span class="req">*</span></label>
+        <input id="fEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <div class="err" id="e-email">Enter a valid email.</div>
+
+        <label>What do you most hope to get from this day? <span class="req">*</span></label>
+        <div class="chips" id="expChips"></div>
+        <div class="err" id="e-exp">Pick at least one.</div>
+        <textarea id="fNote" name="note" placeholder="Anything specific on your mind? (optional) — e.g. I've been sleeping poorly and want to feel calmer." style="margin-top:10px;"></textarea>
+
+        <div class="row2" style="margin-top:4px;">
+          <div>
+            <label for="fSeats">Number of seats</label>
+            <select id="fSeats" name="seats"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+          </div>
+          <div>
+            <label for="fSrc">How did you hear about us?</label>
+            <select id="fSrc" name="source"><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Friend / Referral</option><option>Other</option></select>
+          </div>
+        </div>
+        <button type="submit" class="btn primary">Reserve &amp; proceed to payment →</button>
+        <div class="fine">🔒 Secure checkout · Confirmation on WhatsApp</div>
+      </form>
+
+      <div class="offer-card">
+        <div class="ol">✨ Early-bird offer</div>
+        <div class="oa">₹9,699 <small>/ seat</small></div>
+        <div class="saverow"><span class="save-pill">SAVE ₹6,300 · 39% OFF</span><span class="reg">Regular <s>₹15,999</s></span></div>
+        <div class="duo">👥 Register <b>2 together</b> — get an extra <b>₹1,000 off</b></div>
+
+        <!-- two halves: details on the left, day timeline on the right -->
+        <div class="ocsplit">
+          <div>
+            <div class="blk">
+              <div class="bt">Includes</div>
+              <div>• Breakfast, Lunch &amp; Tea (on the day)</div>
+              <div>• All guided sessions &amp; practices</div>
+              <div>• Notebook &amp; pen</div>
+            </div>
+            <div class="blk">
+              <div class="bt">What to bring</div>
+              <div>• Yoga Mat / Shawl / Bedsheet</div>
+              <div>• Chairs available if needed</div>
+            </div>
+            <div class="blk">
+              <div class="bt">Good to know</div>
+              <div>• Come on an empty stomach</div>
+              <div>• All levels — no experience needed</div>
+              <div>• Wear comfortable clothing</div>
+              <div>• Confirmation &amp; details on WhatsApp</div>
+            </div>
+          </div>
+          <div class="daytl">
+            <!-- EDIT THE DAY SCHEDULE HERE -->
+            <div class="tlh">What happens during the day</div>
+            <ol>
+              <li><span class="tt">7:30 AM</span><span class="tl">Registration</span></li>
+              <li><span class="tt">8:00 AM</span><span class="tl">Energy Activation</span></li>
+              <li><span class="tt">10:00 AM</span><span class="tl">Breathwork Masterclass</span></li>
+              <li><span class="tt">12:30 PM</span><span class="tl">Lunch</span></li>
+              <li><span class="tt">2:00 PM</span><span class="tl">Chakra Dhyana</span></li>
+              <li><span class="tt">4:00 PM</span><span class="tl">Integration</span></li>
+              <li><span class="tt">5:00 PM</span><span class="tl">Closing</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="foot">
+          <!-- EDIT SEAT NUMBERS HERE: --seat-pct = % filled · text below -->
+          <div class="seatbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82" aria-label="Seats reserved">
+            <div class="sbtop">
+              <span class="live"><span class="dot"></span>Filling fast</span>
+              <span class="left">11 of 60 seats left</span>
+            </div>
+            <div class="seattrack"><div class="seatfill" style="--seat-pct:82%"></div></div>
+            <div class="seatmeta">49 of 60 seats filled · 82%</div>
+          </div>
+          <div class="nums">📞 78291 51346 · 81529 13746</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Organized by <b>The Kindling Labs Private Limited</b> · Wellness · Moderation · Elevate
+</footer>
+
+<script>
+/* ============================================================
+   Only the interactive bits need JS (expectation chips + form).
+   Everything visible (theme, timeline, seats bar) is pure HTML/CSS,
+   so the page looks right even if scripts are blocked.
+   ============================================================ */
+const EXPECTS = ['😴 Better sleep','⚡ More energy','😌 Less stress','🎯 Focus & clarity','❤️ Emotional balance','🧘 A daily habit','🛡️ Immunity','🕊️ Inner peace'];
+const ec = document.getElementById('expChips');
+EXPECTS.forEach(t=>{ const el=document.createElement('div'); el.className='chip'; el.textContent=t; el.onclick=()=>el.classList.toggle('on'); ec.appendChild(el); });
+
+function showErr(id,on){ document.getElementById('e-'+id).style.display=on?'block':'none'; }
+document.getElementById('regForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const g=id=>document.getElementById(id).value.trim();
+  const name=g('fName'), phone=g('fPhone'), email=g('fEmail');
+  const expectations=[...document.querySelectorAll('#expChips .chip.on')].map(c=>c.textContent);
+  let ok=true;
+  showErr('name',!name); if(!name) ok=false;
+  const phoneOk=phone.replace(/[^\d]/g,'').length>=8; showErr('phone',!phoneOk); if(!phoneOk) ok=false;
+  const emailOk=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email); showErr('email',!emailOk); if(!emailOk) ok=false;
+  showErr('exp',expectations.length===0); if(expectations.length===0) ok=false;
+  if(!ok){ document.querySelector('.err[style*="block"]').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  const reg={
+    event:'Magic of Breath & Elevated Chakras', dates:'23 August 2026',
+    venue:'Hotel Green Park, Bannerghatta Road, Bengaluru',
+    name, phone, email, expectations, note:g('fNote'),
+    seats:document.getElementById('fSeats').value, source:document.getElementById('fSrc').value,
+    createdAt:new Date().toISOString()
+  };
+  try { localStorage.setItem('tkl_event_signup', JSON.stringify(reg)); } catch(_){ /* storage blocked — ignore */ }
+  window.location.href='payment.html';
+});
+</script>
+</body>
+</html>
