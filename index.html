@@ -825,6 +825,13 @@ document.documentElement.classList.remove('no-js');
     document.body.style.overflow='';
   }
 
+  function shouldAutoOpenSignup(){
+    var params=new URLSearchParams(window.location.search);
+    var hash=(window.location.hash || '').replace(/^#/,'').toLowerCase();
+    var reserve=params.get('reserve');
+    return reserve === '1' || reserve === 'true' || hash === 'reserve' || hash === 'signup';
+  }
+
   function selectedExpectations(){
     var selected=[];
     signupChips.forEach(function(chip){
@@ -1018,6 +1025,10 @@ document.documentElement.classList.remove('no-js');
       openSignupModal();
     });
   });
+
+  if(shouldAutoOpenSignup()){
+    window.setTimeout(openSignupModal,100);
+  }
 
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(entries){
