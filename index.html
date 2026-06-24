@@ -564,7 +564,7 @@ img,svg{max-width:100%}
         </div>
         <div class="signup-field">
           <label for="signup-phone">Phone</label>
-          <input id="signup-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+          <input id="signup-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="10" maxlength="18" pattern="[0-9+()\\s-]{10,18}" required>
         </div>
         <div class="signup-field">
           <label for="signup-email">Email</label>
@@ -775,8 +775,8 @@ document.documentElement.classList.remove('no-js');
       setSignupError('Please enter a valid email address.');
       return null;
     }
-    if(phoneDigits.length < 8 || phoneDigits.length > 15){
-      setSignupError('Please enter a valid phone number.');
+    if(phoneDigits.length < 10 || phoneDigits.length > 15){
+      setSignupError('Please enter a valid phone number with at least 10 digits.');
       return null;
     }
     if(seats < 1 || seats > MAX_SEATS){
