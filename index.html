@@ -234,6 +234,40 @@ footer { background: var(--dark); color: rgba(245, 240, 232, 0.5); padding: 3rem
   footer { flex-direction: column; gap: 1rem; text-align: center; }
 }
 
+@media (max-width: 700px) {
+  nav { gap: 0.85rem; padding: 0.75rem 1rem; }
+  .nav-logo { min-width: 0; font-size: 1.08rem; letter-spacing: 0.02em; }
+  .nav-cta { flex: none; min-height: 44px; padding: 0.58rem 0.78rem; font-size: 0.66rem; letter-spacing: 0.08em; white-space: nowrap; }
+  .hero { min-height: auto; padding: 6rem 1rem 2.5rem; }
+  .hero h1 { font-size: clamp(2.55rem, 15vw, 3.4rem); line-height: 1.02; }
+  .hero-tagline { font-size: 0.98rem; margin-bottom: 2rem; }
+  .hero-actions, .cta-actions { flex-direction: column; align-items: stretch; gap: 0.85rem; }
+  .btn-primary, .btn-secondary, .btn-light, .btn-outline { width: 100%; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; text-align: center; }
+  .hero-stats { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; }
+  .stat-num { font-size: 2.15rem; }
+  .stat-label { font-size: 0.62rem; letter-spacing: 0.1em; }
+  section { padding: 3.5rem 1rem; }
+  .intro-banner, .cta { padding: 3.5rem 1rem; }
+  .practice-card { padding: 2.25rem 1.25rem; }
+  .practice-num { top: 1rem; right: 1.1rem; font-size: 3.7rem; }
+  .benefits-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .benefit-item { padding: 1.35rem; }
+  .structure-steps { grid-template-columns: 1fr; }
+  .step { border-right: 0; padding: 2rem 1.25rem; }
+  .taglines-strip { padding: 2rem 1rem; }
+  .tagline-item { font-size: 1.05rem; }
+  footer { padding: 2.5rem 1rem; }
+}
+
+@media (max-width: 420px) {
+  .brand-mark { width: 30px; height: 30px; }
+  .nav-logo { font-size: 1rem; }
+  .nav-cta { padding-inline: 0.65rem; font-size: 0.62rem; letter-spacing: 0.05em; }
+  .hero { padding-top: 5.6rem; }
+  .hero-location { font-size: 0.66rem; letter-spacing: 0.14em; }
+  .hero h1 { font-size: clamp(2.35rem, 14vw, 2.9rem); }
+}
+
 /* live-site additions */
 @media (prefers-reduced-motion: reduce){
   .fade-in{opacity:1 !important;transform:none !important}
@@ -270,7 +304,7 @@ img,svg{max-width:100%}
 .signup-submit:disabled{opacity:.65;cursor:wait}
 .signup-consent{display:flex;gap:.6rem;align-items:flex-start;letter-spacing:0;text-transform:none;font-size:.88rem;line-height:1.5}
 .signup-consent input{margin-top:.25rem}
-@media(max-width:700px){.signup-grid{grid-template-columns:1fr}.signup-head,.signup-form{padding-left:1rem;padding-right:1rem}.signup-actions,.signup-summary{flex-direction:column;align-items:stretch}.signup-submit{width:100%}}
+@media(max-width:700px){.signup-modal{align-items:flex-end;padding:.5rem}.signup-dialog{max-height:calc(100dvh - 1rem);width:100%;border-radius:0}.signup-grid{grid-template-columns:1fr}.signup-head{gap:.75rem}.signup-head h3{font-size:1.75rem}.signup-head,.signup-form{padding-left:1rem;padding-right:1rem}.signup-close{flex:none;min-width:44px;min-height:44px}.signup-actions,.signup-summary{flex-direction:column;align-items:stretch}.signup-submit{width:100%;min-height:46px}.signup-chip{min-height:42px}}
 </style>
 </head>
 <body id="artifacts-component-root-html">
