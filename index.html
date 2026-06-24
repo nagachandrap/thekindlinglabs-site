@@ -564,7 +564,7 @@ img,svg{max-width:100%}
         </div>
         <div class="signup-field">
           <label for="signup-phone">Phone</label>
-          <input id="signup-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" minlength="10" maxlength="18" pattern="[0-9+()\\s-]{10,18}" required>
+          <input id="signup-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 99000 00000" minlength="10" maxlength="18" pattern="[0-9+()\s-]{10,18}" required>
         </div>
         <div class="signup-field">
           <label for="signup-email">Email</label>
@@ -756,13 +756,27 @@ document.documentElement.classList.remove('no-js');
     return selected;
   }
 
+  function normalizeIndianPhone(phone){
+    var digits=String(phone || '').replace(/\D/g,'');
+    if(digits.length === 12 && digits.indexOf('91') === 0){
+      digits=digits.slice(2);
+    }
+    if(digits.length === 11 && digits.charAt(0) === '0'){
+      digits=digits.slice(1);
+    }
+    if(!/^[6-9]\d{9}$/.test(digits)){
+      return '';
+    }
+    return '+91' + digits;
+  }
+
   function collectSignup(){
     if(!signupForm){return null;}
     var formData=new FormData(signupForm);
     var fullName=String(formData.get('full_name') || '').trim();
     var email=String(formData.get('email') || '').trim();
     var phone=String(formData.get('phone') || '').trim();
-    var phoneDigits=phone.replace(/\D/g,'');
+    var normalizedPhone=normalizeIndianPhone(phone);
     var seats=Math.max(1,Number(formData.get('seats') || 1));
     var source=String(formData.get('source') || '').trim();
     var note=String(formData.get('note') || '').trim();
@@ -775,8 +789,8 @@ document.documentElement.classList.remove('no-js');
       setSignupError('Please enter a valid email address.');
       return null;
     }
-    if(phoneDigits.length < 10 || phoneDigits.length > 15){
-      setSignupError('Please enter a valid phone number with at least 10 digits.');
+    if(!normalizedPhone){
+      setSignupError('Please enter a valid Indian WhatsApp number.');
       return null;
     }
     if(seats < 1 || seats > MAX_SEATS){
@@ -794,7 +808,7 @@ document.documentElement.classList.remove('no-js');
       program_name:'The Kindling Labs online program',
       full_name:fullName,
       email:email,
-      phone:phone,
+      phone:normalizedPhone,
       seats:seats,
       expectations:selectedExpectations(),
       source:source,
