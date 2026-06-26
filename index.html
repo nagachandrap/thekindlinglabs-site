@@ -205,7 +205,7 @@ section { padding: 7rem 4rem; }
 
 .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
 
-footer { background: var(--dark); color: rgba(245, 240, 232, 0.5); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+footer { background: var(--dark); color: rgba(245, 240, 232, 0.5); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
 
 .footer-logo { font-family: "Cormorant Garamond", serif; font-size: 1.2rem; color: var(--cream); font-weight: 400; }
 
@@ -214,6 +214,9 @@ footer { background: var(--dark); color: rgba(245, 240, 232, 0.5); padding: 3rem
 .footer-text { font-size: 0.78rem; letter-spacing: 0.05em; }
 
 .footer-city { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm-terracotta); }
+.footer-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.footer-links a { color: rgba(245, 240, 232, 0.72); text-decoration: none; }
+.footer-links a:hover { color: var(--gold); }
 
 .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
 
@@ -308,6 +311,7 @@ img,svg{max-width:100%}
 .signup-submit:disabled{opacity:.65;cursor:wait}
 .signup-consent{display:flex;gap:.6rem;align-items:flex-start;letter-spacing:0;text-transform:none;font-size:.88rem;line-height:1.5}
 .signup-consent input{margin-top:.25rem}
+.signup-consent a{color:var(--warm-terracotta);text-decoration:underline;text-underline-offset:2px}
 @media(max-width:700px){.signup-modal{align-items:flex-end;padding:.75rem .5rem .5rem;padding-top:calc(env(safe-area-inset-top,0px) + .75rem)}.signup-dialog{max-height:calc(100dvh - 1.25rem - env(safe-area-inset-top,0px));width:100%;border-radius:0}.signup-grid{grid-template-columns:1fr}.signup-head{gap:.75rem}.signup-head h3{font-size:1.75rem}.signup-head,.signup-form{padding-left:1rem;padding-right:1rem}.signup-close{flex:none;min-width:44px;min-height:44px}.signup-actions,.signup-summary{flex-direction:column;align-items:stretch}.signup-submit{width:100%;min-height:46px}.signup-chip{min-height:42px}}
 </style>
 </head>
@@ -321,6 +325,7 @@ img,svg{max-width:100%}
     <li><a href="#benefits">Benefits</a></li>
     <li><a href="#programs">Programs</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="policies.html">Policies</a></li>
   </ul>
   <button class="nav-cta" data-checkout-button>Reserve Your Seat</button>
 </nav>
@@ -637,7 +642,7 @@ img,svg{max-width:100%}
       </div>
       <label class="signup-consent">
         <input id="signup-consent" type="checkbox" required>
-        <span>I agree to be contacted about this program.</span>
+        <span>I have read and agree to the <a href="policies.html" target="_blank" rel="noopener">Terms, Privacy & Refund Policy</a>, including the health and liability disclaimer, and consent to be contacted about this program.</span>
       </label>
       <div class="signup-summary">
         <span id="signup-price">Reservation amount loading...</span>
@@ -655,6 +660,12 @@ img,svg{max-width:100%}
 <footer>
   <div class="footer-logo"><i class="brand-mark foot" aria-hidden="true"></i>The Kindling <span>Labs</span></div>
   <div class="footer-text">© 2025 The Kindling Labs. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="policies.html">Terms, Privacy & Refunds</a>
+    <a href="mailto:hello@thekindlinglabs.com">hello@thekindlinglabs.com</a>
+    <a href="tel:+919739415246">+91 97394 15246</a>
+    <a href="https://wa.me/919739415246">WhatsApp</a>
+  </div>
   <div class="footer-city">Bangalore, India</div>
 </footer>
 
