@@ -559,13 +559,13 @@
       <div class="fine">Secure checkout via Razorpay · Confirmation on WhatsApp</div>
 
       <div class="foot">
-        <div class="seatbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82" aria-label="Seats reserved">
+        <div class="seatbar" data-seat-summary role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Seats reserved">
           <div class="sbtop">
-            <span class="live"><span class="dot"></span>Filling fast</span>
-            <span class="left">11 of 60 seats left</span>
+            <span class="live"><span class="dot"></span><span data-seat-label>Checking seats</span></span>
+            <span class="left" data-seat-left>Live count loading</span>
           </div>
-          <div class="seattrack"><div class="seatfill" style="--seat-pct:82%"></div></div>
-          <div class="seatmeta">49 of 60 seats filled · 82%</div>
+          <div class="seattrack"><div class="seatfill" data-seat-fill style="--seat-pct:0%"></div></div>
+          <div class="seatmeta" data-seat-meta>Pulling confirmed payments from registrations</div>
         </div>
         <div class="nums">78291 51346 · 81529 13746</div>
       </div>
@@ -627,5 +627,47 @@
   </div>
 </section>
 
+<script>
+(function(){
+  var defaultApiBase=/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)
+    ? 'http://localhost:8000'
+    : 'https://3.7.111.31.sslip.io';
+  var apiBase=(window.KINDLING_PAYMENT_API_BASE_URL || defaultApiBase).replace(/\/+$/,'');
+  var seatbar=document.querySelector('[data-seat-summary]');
+  if(!seatbar){return;}
+  var label=document.querySelector('[data-seat-label]');
+  var left=document.querySelector('[data-seat-left]');
+  var fill=document.querySelector('[data-seat-fill]');
+  var meta=document.querySelector('[data-seat-meta]');
+
+  function setText(el,text){
+    if(el){el.textContent=text;}
+  }
+
+  fetch(apiBase + '/api/events/magic-of-breath/seat-summary')
+    .then(function(response){
+      if(!response.ok){throw new Error('seat summary unavailable');}
+      return response.json();
+    })
+    .then(function(summary){
+      var capacity=Number(summary.capacity) || 0;
+      var paid=Number(summary.paid_seats) || 0;
+      var seatsLeft=Number(summary.seats_left) || 0;
+      var percent=Number(summary.percent_filled) || 0;
+      seatbar.setAttribute('aria-valuenow', String(percent));
+      setText(label, summary.label || 'Seats available');
+      setText(left, seatsLeft + ' of ' + capacity + ' seats left');
+      if(fill){fill.style.setProperty('--seat-pct', percent + '%');}
+      setText(meta, paid + ' of ' + capacity + ' seats filled · ' + percent + '%');
+    })
+    .catch(function(){
+      seatbar.setAttribute('aria-valuenow','0');
+      setText(label,'Limited seats');
+      setText(left,'Live seat count unavailable');
+      if(fill){fill.style.setProperty('--seat-pct','0%');}
+      setText(meta,'Please reserve to confirm current availability.');
+    });
+})();
+</script>
 </body>
 </html>
