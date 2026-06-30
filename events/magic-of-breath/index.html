@@ -295,6 +295,8 @@
   @keyframes fillup{from{width:0;} to{width:var(--seat-pct,0%);}}
   @keyframes chase{from{background-position:0 0;} to{background-position:26px 0;}}
   .seatmeta{font-size:11.5px; color:var(--sub); margin-top:8px; text-align:center;}
+  .hero-seatbar{max-width:500px; margin-top:12px; padding:12px 14px; border:1.5px solid var(--line);
+    border-radius:14px; background:var(--paper-grad); box-shadow:var(--sh-sm);}
 
   footer{background:var(--accent-grad); color:var(--on-accent); text-align:center; padding:26px; font-size:13.5px; margin-top:0; transition:background .35s ease;}
   footer b{color:var(--on-accent);}
@@ -371,6 +373,14 @@
         <a href="/?reserve=1" class="btn solid">Reserve my seat</a>
       </div>
       <div class="urgency anim d5"><span class="dot"></span> Limited seats · Early-bird pricing won't last</div>
+      <div class="seatbar hero-seatbar anim d5" data-seat-summary role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Seats reserved">
+        <div class="sbtop">
+          <span class="live"><span class="dot"></span><span data-seat-label>Checking seats</span></span>
+          <span class="left" data-seat-left>Live count loading</span>
+        </div>
+        <div class="seattrack"><div class="seatfill" data-seat-fill style="--seat-pct:0%"></div></div>
+        <div class="seatmeta" data-seat-meta>Pulling confirmed payments from registrations</div>
+      </div>
     </div>
     <div id="teaser" class="anim d4">
       <div class="teaser">
@@ -633,15 +643,43 @@
     ? 'http://localhost:8000'
     : 'https://3.7.111.31.sslip.io';
   var apiBase=(window.KINDLING_PAYMENT_API_BASE_URL || defaultApiBase).replace(/\/+$/,'');
-  var seatbar=document.querySelector('[data-seat-summary]');
-  if(!seatbar){return;}
-  var label=document.querySelector('[data-seat-label]');
-  var left=document.querySelector('[data-seat-left]');
-  var fill=document.querySelector('[data-seat-fill]');
-  var meta=document.querySelector('[data-seat-meta]');
+  var seatbars=document.querySelectorAll('[data-seat-summary]');
+  if(!seatbars.length){return;}
 
   function setText(el,text){
     if(el){el.textContent=text;}
+  }
+
+  function updateSeatbars(summary){
+    var capacity=Number(summary.capacity) || 0;
+    var paid=Number(summary.paid_seats) || 0;
+    var seatsLeft=Number(summary.seats_left) || 0;
+    var percent=Number(summary.percent_filled) || 0;
+    seatbars.forEach(function(seatbar){
+      var label=seatbar.querySelector('[data-seat-label]');
+      var left=seatbar.querySelector('[data-seat-left]');
+      var fill=seatbar.querySelector('[data-seat-fill]');
+      var meta=seatbar.querySelector('[data-seat-meta]');
+      seatbar.setAttribute('aria-valuenow', String(percent));
+      setText(label, summary.label || 'Seats available');
+      setText(left, seatsLeft + ' of ' + capacity + ' seats left');
+      if(fill){fill.style.setProperty('--seat-pct', percent + '%');}
+      setText(meta, paid + ' of ' + capacity + ' seats filled · ' + percent + '%');
+    });
+  }
+
+  function markUnavailable(){
+    seatbars.forEach(function(seatbar){
+      var label=seatbar.querySelector('[data-seat-label]');
+      var left=seatbar.querySelector('[data-seat-left]');
+      var fill=seatbar.querySelector('[data-seat-fill]');
+      var meta=seatbar.querySelector('[data-seat-meta]');
+      seatbar.setAttribute('aria-valuenow','0');
+      setText(label,'Limited seats');
+      setText(left,'Live seat count unavailable');
+      if(fill){fill.style.setProperty('--seat-pct','0%');}
+      setText(meta,'Please reserve to confirm current availability.');
+    });
   }
 
   fetch(apiBase + '/api/events/magic-of-breath/seat-summary')
@@ -650,22 +688,10 @@
       return response.json();
     })
     .then(function(summary){
-      var capacity=Number(summary.capacity) || 0;
-      var paid=Number(summary.paid_seats) || 0;
-      var seatsLeft=Number(summary.seats_left) || 0;
-      var percent=Number(summary.percent_filled) || 0;
-      seatbar.setAttribute('aria-valuenow', String(percent));
-      setText(label, summary.label || 'Seats available');
-      setText(left, seatsLeft + ' of ' + capacity + ' seats left');
-      if(fill){fill.style.setProperty('--seat-pct', percent + '%');}
-      setText(meta, paid + ' of ' + capacity + ' seats filled · ' + percent + '%');
+      updateSeatbars(summary);
     })
     .catch(function(){
-      seatbar.setAttribute('aria-valuenow','0');
-      setText(label,'Limited seats');
-      setText(left,'Live seat count unavailable');
-      if(fill){fill.style.setProperty('--seat-pct','0%');}
-      setText(meta,'Please reserve to confirm current availability.');
+      markUnavailable();
     });
 })();
 </script>
