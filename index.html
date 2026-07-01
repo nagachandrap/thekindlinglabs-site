@@ -653,6 +653,35 @@ document.documentElement.classList.remove('no-js');
     ? 'http://localhost:8000'
     : 'https://3.7.111.31.sslip.io';
   var PAYMENT_API_BASE_URL=(window.KINDLING_PAYMENT_API_BASE_URL || defaultPaymentApiBaseUrl).replace(/\/+$/,'');
+  function getKindlingVisitorId(){
+    try{
+      var key='kindling_visitor_id';
+      var existing=window.localStorage && window.localStorage.getItem(key);
+      if(existing){return existing;}
+      var created='kv_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,12);
+      window.localStorage.setItem(key,created);
+      return created;
+    }catch(err){
+      return null;
+    }
+  }
+  function trackWebsiteVisit(eventSlug){
+    if(!window.fetch){return;}
+    try{
+      window.fetch(PAYMENT_API_BASE_URL + '/api/website-visit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          path:window.location.pathname + window.location.search,
+          referrer:document.referrer || '',
+          visitor_id:getKindlingVisitorId(),
+          event_slug:eventSlug || null
+        }),
+        keepalive:true
+      }).catch(function(){});
+    }catch(err){}
+  }
+  trackWebsiteVisit('magic-of-breath');
   var PAYMENT_AMOUNT_PAISE=969900;
   var PAYMENT_LIST_AMOUNT_PAISE=1599900;
   var PAYMENT_FAMILY_DISCOUNT_AMOUNT_PAISE=100000;
