@@ -644,6 +644,35 @@
     ? 'http://localhost:8000'
     : 'https://3.7.111.31.sslip.io';
   var apiBase=(window.KINDLING_PAYMENT_API_BASE_URL || defaultApiBase).replace(/\/+$/,'');
+  function getKindlingVisitorId(){
+    try{
+      var key='kindling_visitor_id';
+      var existing=window.localStorage && window.localStorage.getItem(key);
+      if(existing){return existing;}
+      var created='kv_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,12);
+      window.localStorage.setItem(key,created);
+      return created;
+    }catch(err){
+      return null;
+    }
+  }
+  function trackWebsiteVisit(){
+    if(!window.fetch){return;}
+    try{
+      window.fetch(apiBase + '/api/website-visit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          path:window.location.pathname + window.location.search,
+          referrer:document.referrer || '',
+          visitor_id:getKindlingVisitorId(),
+          event_slug:'magic-of-breath'
+        }),
+        keepalive:true
+      }).catch(function(){});
+    }catch(err){}
+  }
+  trackWebsiteVisit();
   var seatbars=document.querySelectorAll('[data-seat-summary]');
   if(!seatbars.length){return;}
 

@@ -131,5 +131,40 @@ h1{font-family:"Cormorant Garamond",serif;font-size:clamp(2.7rem,6vw,5rem);font-
 <footer class="footer">
   The Kindling Labs, Bangalore, India
 </footer>
+<script>
+(function(){
+  var defaultApiBase=/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)
+    ? 'http://localhost:8000'
+    : 'https://3.7.111.31.sslip.io';
+  var apiBase=(window.KINDLING_PAYMENT_API_BASE_URL || defaultApiBase).replace(/\/+$/,'');
+  function getKindlingVisitorId(){
+    try{
+      var key='kindling_visitor_id';
+      var existing=window.localStorage && window.localStorage.getItem(key);
+      if(existing){return existing;}
+      var created='kv_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,12);
+      window.localStorage.setItem(key,created);
+      return created;
+    }catch(err){
+      return null;
+    }
+  }
+  if(window.fetch){
+    try{
+      window.fetch(apiBase + '/api/website-visit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          path:window.location.pathname + window.location.search,
+          referrer:document.referrer || '',
+          visitor_id:getKindlingVisitorId(),
+          event_slug:null
+        }),
+        keepalive:true
+      }).catch(function(){});
+    }catch(err){}
+  }
+})();
+</script>
 </body>
 </html>
